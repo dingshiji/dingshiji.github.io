@@ -191,6 +191,10 @@
               setTimeout(function () {
                 that.addClass('appeared');
               }, 4000);  // 这里的4000是雾气消失(1000ms) + 等待(1000ms) + 人物出现(2000ms) 的总和
+
+              $(this).find('.overlay-image').click(function () {
+                $(this).siblings('.overlay-text').fadeIn(1000);
+              });
             }
           }
         });

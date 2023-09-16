@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Image Overlay Example</title>
-<!-- 使用 BootCDN -->
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- 使用 BootCDN -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
     .image-container {
@@ -149,7 +149,7 @@
           <div class="text-box third">社团名称</div>
         </div>
       </div>
-    
+
       <div class="col-md-12 image-container" id="photo">
         <img src="../assets/background/photo.png" alt="photo" class="img-fluid bg-image">
       </div>
@@ -170,28 +170,32 @@
 
           if (bottom_of_screen > middle_of_element && top_of_screen < middle_of_element) {
             if (!$(this).hasClass('appeared')) {
-              // 逐渐显示人物和文本框
-              $(this).find('.overlay-image').fadeIn(2000);
+              // 逐渐消失雾气
+              var that = $(this);
               $(this).find('.fog').fadeOut(1000, function () {
-                // 在雾气完全散开后，文本框飞入
-                $(this).siblings('.text-box-container').addClass('appeared');
+
+                // 雾气消失后等待一秒钟
+                setTimeout(function () {
+
+                  // 人物缓慢出现
+                  that.find('.overlay-image').fadeIn(2000, function () {
+
+                    // 人物出现后，文字才飞出
+                    that.find('.text-box-container').addClass('appeared');
+                  });
+
+                }, 1000);
               });
 
-              // 在1秒后（雾气散开后）添加.appeared类
-              var that = $(this);
+              // 在整个流程结束后添加.appeared类，以防止重复触发
               setTimeout(function () {
                 that.addClass('appeared');
-              }, 1000);
-
-              $(this).find('.overlay-image').click(function () {
-                $(this).siblings('.overlay-text').fadeIn(1000);
-              });
+              }, 4000);  // 这里的4000是雾气消失(1000ms) + 等待(1000ms) + 人物出现(2000ms) 的总和
             }
           }
         });
       });
     });
-
   </script>
 </body>
 

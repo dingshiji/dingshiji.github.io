@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Image Overlay Example</title>
+<!-- 使用 BootCDN -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .image-container {
+      position: relative;
+    }
+
+    .bg-image {
+      width: 100%;
+    }
+
+
+    .fog {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.7);
+      /* 白色，半透明 */
+      width: 200%;
+      height: 50%;
+      border-radius: 50%;
+      /* 圆形 */
+      bottom: 0;
+      /* 页面的下半部分 */
+      left: -50%;
+      /* 水平居中 */
+      display: block;
+      /* 默认显示 */
+    }
+
+    .overlay-image {
+      display: none;
+      position: absolute;
+      top: 60%;
+      /* 将图片移动到页面的下半部分 */
+      right: 10px;
+      width: calc(100% / 1.5);
+    }
+
+    .text-box {
+      font-size: 24px;
+      /* 增大文字大小 */
+      background: #333333;
+      /* 不纯黑 */
+      color: #EEEEEE;
+      /* 不纯白 */
+      border: 1px solid black;
+      padding: 20px;
+      /* 增大内边距 */
+      margin: 10px;
+      /* 增大外边距 */
+      position: relative;
+    }
+
+    .text-box-container {
+      position: absolute;
+      left: -150%;
+      top: 50%;
+      transition: left 1s ease-out;
+    }
+
+    .appeared .text-box-container {
+      left: 20%;
+      /* 移动到左侧20%的位置，使其更向右一点 */
+    }
+
+    .text-box.first {
+      left: 0%;
+    }
+
+    .text-box.second {
+      left: 5%;
+    }
+
+    .text-box.third {
+      left: 10%;
+    }
+
+    .overlay-text {
+      display: none;
+      /* 默认不显示 */
+      position: absolute;
+      top: 60%;
+      right: 10%;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 image-container" id="welcome">
+        <img src="../assets/background/welcome.png" alt="welcome" class="img-fluid bg-image">
+      </div>
+      <div class="col-md-12 image-container" id="feng">
+        <img src="../assets/background/风.png" alt="风" class="img-fluid bg-image">
+        <img src="../assets/character/风.png" alt="风人物" class="overlay-image">
+        <div class="overlay-text">这里是关于该人物的一些信息。</div>
+        <div class="fog"></div> <!-- 添加这一行 -->
+        <div class="text-box-container">
+          <div class="text-box first">社团名称</div>
+          <div class="text-box second">社团名称</div>
+          <div class="text-box third">社团名称</div>
+        </div>
+      </div>
+      <!-- ... 其他图片和人物 ... -->
+      <div class="col-md-12 image-container" id="lin">
+        <img src="../assets/background/林.png" alt="林" class="img-fluid bg-image">
+        <img src="../assets/character/林.png" alt="林人物" class="overlay-image">
+        <div class="overlay-text">这里是关于该人物的一些信息。</div>
+        <div class="fog"></div> <!-- 添加这一行 -->
+        <div class="text-box-container">
+          <div class="text-box first">社团名称</div>
+          <div class="text-box second">社团名称</div>
+          <div class="text-box third">社团名称</div>
+        </div>
+      </div>
+      <div class="col-md-12 image-container" id="huo">
+        <img src="../assets/background/火.png" alt="火" class="img-fluid bg-image">
+        <img src="../assets/character/火.png" alt="火人物" class="overlay-image">
+        <div class="overlay-text">这里是关于该人物的一些信息。</div>
+        <div class="fog"></div> <!-- 添加这一行 -->
+        <div class="text-box-container">
+          <div class="text-box first">社团名称</div>
+          <div class="text-box second">社团名称</div>
+          <div class="text-box third">社团名称</div>
+        </div>
+      </div>
+      <!-- ... 其他图片和人物 ... -->
+      <div class="col-md-12 image-container" id="shan">
+        <img src="../assets/background/山.png" alt="山" class="img-fluid bg-image">
+        <img src="../assets/character/山.png" alt="山人物" class="overlay-image">
+        <div class="overlay-text">这里是关于该人物的一些信息。</div>
+        <div class="fog"></div> <!-- 添加这一行 -->
+        <div class="text-box-container">
+          <div class="text-box first">社团名称</div>
+          <div class="text-box second">社团名称</div>
+          <div class="text-box third">社团名称</div>
+        </div>
+      </div>
+    
+      <div class="col-md-12 image-container" id="photo">
+        <img src="../assets/background/photo.png" alt="photo" class="img-fluid bg-image">
+      </div>
+
+      <div class="col-md-12 image-container" id="end">
+        <img src="../assets/background/end.png" alt="end" class="img-fluid bg-image">
+      </div>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function () {
+      $(window).scroll(function () {
+        $('.image-container').each(function () {
+          var top_of_element = $(this).offset().top;
+          var middle_of_element = top_of_element + $(this).outerHeight() / 2;
+          var bottom_of_screen = $(window).scrollTop() + $(window).innerHeight();
+          var top_of_screen = $(window).scrollTop();
+
+          if (bottom_of_screen > middle_of_element && top_of_screen < middle_of_element) {
+            if (!$(this).hasClass('appeared')) {
+              // 逐渐显示人物和文本框
+              $(this).find('.overlay-image').fadeIn(2000);
+              $(this).find('.fog').fadeOut(1000, function () {
+                // 在雾气完全散开后，文本框飞入
+                $(this).siblings('.text-box-container').addClass('appeared');
+              });
+
+              // 在1秒后（雾气散开后）添加.appeared类
+              var that = $(this);
+              setTimeout(function () {
+                that.addClass('appeared');
+              }, 1000);
+
+              $(this).find('.overlay-image').click(function () {
+                $(this).siblings('.overlay-text').fadeIn(1000);
+              });
+            }
+          }
+        });
+      });
+    });
+
+  </script>
+</body>
+
+</html>
